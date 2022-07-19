@@ -1,0 +1,14 @@
+{% extends 'base/main.html' %}
+
+{% block content %}
+    <center>
+    <h1>Portolio</h1>
+
+        {% for portfolio in show_portfolio %}
+            <a href="{% url 'show-portfolio' portfolio.id %}">{{ portfolio }}</a> - {{ portfolio.user }} <br>
+        {% endfor %}
+    </center>
+
+
+{% endblock content %}
+
