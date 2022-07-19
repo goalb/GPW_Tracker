@@ -1,0 +1,18 @@
+{% extends 'base/main.html' %}
+
+{% block content %}
+    <center>
+    {% if searched %}
+        <h1>You searched for {{ searched }}</h1>
+        <br>
+        {% for company in companies %}
+            <a href="{% url 'show-company' company.id %}"> {{ company }} </a>
+            <br>
+        {% endfor %}
+    {% endif %}
+
+    </center>
+
+
+{% endblock content %}
+
