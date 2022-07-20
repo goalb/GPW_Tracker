@@ -9,4 +9,5 @@ urlpatterns = [
     path('show_portfolio/<portfolio_id>', views.show_portfolio, name='show-portfolio'),
     path('show_company/<company_id>', views.show_company, name='show-company'),
     path('search_company', views.search_company, name='search-company'),
+    path('update_portfolio/<portfolio_id>', views.update_portfolio, name='update-portfolio'),
 ]

@@ -2,13 +2,20 @@
 
 {% block content %}
     <center>
-    <h1>Portolio</h1>
-
+    <h1>Portfolio</h1>
+<table class="table table-striped table-hover table-bordered">
         {% for portfolio in show_portfolio %}
-            <a href="{% url 'show-portfolio' portfolio.id %}">{{ portfolio }}</a> - {{ portfolio.user }} <br>
+    <tr>
+        <td>
+            <a href="{% url 'show-portfolio' portfolio.id %}">{{ portfolio }}</a> <br>
+        </td>
+        <td align="center">
+            <a href="{% url 'update-portfolio' portfolio.id %}" class="btn btn-outline-secondary btn-sm" >Update</a>
+        </td>
+    </tr>
         {% endfor %}
+</table>
     </center>
-
 
 {% endblock content %}
 

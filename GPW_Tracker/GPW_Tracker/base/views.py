@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from .forms import PortfolioForm
 from .models import Portfolio, Company
@@ -58,4 +58,13 @@ def search_company(request):
         return render(request, 'base/search_company.html', {'searched': searched, 'companies': companies})
     else:
         return render(request, 'base/search_company.html', {})
+
+
+def update_portfolio(request, portfolio_id):
+    portfolio = Portfolio.objects.get(pk=portfolio_id)
+    form = PortfolioForm(request.POST or None, instance=portfolio)
+    if form.is_valid():
+        form.save()
+        return redirect('list-portfolio')
+    return render(request, 'base/update_portfolio.html', {'portfolio': portfolio, 'form': form})
 
