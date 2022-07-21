@@ -4,10 +4,12 @@ from .forms import PortfolioForm
 from .models import Portfolio, Company
 import csv
 
+from django.core.paginator import Paginator
 
 # from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
+
 
 def loginpage(request):
     return render(request, 'login_register.html')
@@ -57,7 +59,13 @@ def add_portfolio(request):
 
 def list_portfolio(request):
     list_portfolio = Portfolio.objects.all().order_by('name')
-    return render(request, 'base/portfolio.html', {'show_portfolio': list_portfolio})
+
+    # Pagination
+    p = Paginator(list_portfolio, 1)
+    page = request.GET.get('page')
+    portfolios = p.get_page(page)
+
+    return render(request, 'base/portfolio.html', {'show_portfolio': list_portfolio, 'portfolios': portfolios})
 
 
 def show_portfolio(request, portfolio_id):
