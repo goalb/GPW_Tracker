@@ -16,6 +16,12 @@
       <li class="nav-item">
         <a class="nav-link" href="{% url 'add-portfolio' %}">Add portfolio</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'portfolio-text' %}">Download portfolio as txt</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'portfolio-download-csv' %}">Download portfolio as CSV</a>
+      </li>
     </ul>
     <form class="d-flex" method="POST" action="{% url 'search-company' %}">
       {% csrf_token %}

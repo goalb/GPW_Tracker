@@ -11,6 +11,8 @@
         </td>
         <td align="center">
             <a href="{% url 'update-portfolio' portfolio.id %}" class="btn btn-outline-secondary btn-sm" >Update</a>
+
+            <a href="{% url 'delete-portfolio' portfolio.id %}" class="btn btn-outline-danger btn-sm" >Delete</a>
         </td>
     </tr>
         {% endfor %}

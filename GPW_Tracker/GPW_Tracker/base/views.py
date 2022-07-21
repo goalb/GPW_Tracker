@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from .forms import PortfolioForm
 from .models import Portfolio, Company
+import csv
 
 
 # from django.contrib.auth import authenticate, login, logout
@@ -14,6 +15,29 @@ def loginpage(request):
 
 def home(request):
     return render(request, 'home.html')
+
+    # Everything with company --------------------------------------------
+
+
+def list_company(request):
+    list_company = Company.objects.all().order_by('name')
+    return render(request, 'base/company.html', {'show_company': list_company})
+
+
+def show_company(request, company_id):
+    company = Company.objects.get(pk=company_id)
+    return render(request, 'base/show_company.html', {'company': company})
+
+
+def search_company(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        companies = Company.objects.filter(name__contains=searched)
+        return render(request, 'base/search_company.html', {'searched': searched, 'companies': companies})
+    else:
+        return render(request, 'base/search_company.html', {})
+
+    # Everything with portfolio ----------------------------------------------
 
 
 def add_portfolio(request):
@@ -32,32 +56,13 @@ def add_portfolio(request):
 
 
 def list_portfolio(request):
-    list_portfolio = Portfolio.objects.all()
+    list_portfolio = Portfolio.objects.all().order_by('name')
     return render(request, 'base/portfolio.html', {'show_portfolio': list_portfolio})
-
-
-def list_company(request):
-    list_company = Company.objects.all()
-    return render(request, 'base/company.html', {'show_company': list_company})
 
 
 def show_portfolio(request, portfolio_id):
     portfolio = Portfolio.objects.get(pk=portfolio_id)
     return render(request, 'base/show_portfolio.html', {'portfolio': portfolio})
-
-
-def show_company(request, company_id):
-    company = Company.objects.get(pk=company_id)
-    return render(request, 'base/show_company.html', {'company': company})
-
-
-def search_company(request):
-    if request.method == "POST":
-        searched = request.POST['searched']
-        companies = Company.objects.filter(name__contains=searched)
-        return render(request, 'base/search_company.html', {'searched': searched, 'companies': companies})
-    else:
-        return render(request, 'base/search_company.html', {})
 
 
 def update_portfolio(request, portfolio_id):
@@ -67,4 +72,47 @@ def update_portfolio(request, portfolio_id):
         form.save()
         return redirect('list-portfolio')
     return render(request, 'base/update_portfolio.html', {'portfolio': portfolio, 'form': form})
+
+
+def delete_portfolio(request, portfolio_id):
+    portfolio = Portfolio.objects.get(pk=portfolio_id)
+    portfolio.delete()
+    return redirect('list-portfolio')
+
+
+def portfolio_text(request):
+    response = HttpResponse(content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename=portoflio.txt'
+
+    # Designate model
+    portfolios = Portfolio.objects.all()
+    lines = []
+
+    # Loop through
+    for portfolio in portfolios:
+        lines.append(f'{portfolio}\n')
+
+    # Write to textfile
+    response.writelines(lines)
+    return response
+
+
+def portfolio_download_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=portoflio.csv'
+
+    # Create a csv writer
+    writer = csv.writer(response)
+
+    # Designate model
+    portfolios = Portfolio.objects.all()
+
+    # Add column to csv file
+    writer.writerow(['Portfolio Name', 'User'])
+
+    # Loop through
+    for portfolio in portfolios:
+        writer.writerow([portfolio.name, portfolio.user])
+
+    return response
 
