@@ -1,9 +1,13 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
     path('login/', views.loginpage, name="login"),
     path('', views.home, name="home"),
+
+    # URLs for app users
+    path('users/', include('django.contrib.auth.urls')),
+    path('users/', include('users.urls')),
 
     # Everything with company
     path('show_company/<company_id>', views.show_company, name='show-company'),
