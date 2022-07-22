@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'base.apps.BaseConfig',
+    'base',
     'users',
 ]
 
@@ -59,6 +59,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'base/templates/base',
+            BASE_DIR / 'users/templates/users',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
