@@ -12,6 +12,8 @@
 
         <!-- Login verify -->
         {% if user.is_authenticated %}
+        {% if user.id == portfolio.user or user.is_superuser %}
+
         <td align="center">
             <a href="{% url 'update-portfolio' portfolio.id %}" class="btn btn-outline-secondary btn-sm" >Update</a>
 
@@ -19,7 +21,7 @@
         </td>
 
         {% endif %}
-
+        {% endif %}
     </tr>
         {% endfor %}
 </table>

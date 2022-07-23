@@ -26,7 +26,7 @@ class User(models.Model):
 class Portfolio(models.Model):
     name = models.CharField('name', max_length=60)
     company = models.ManyToManyField(Company, blank=True, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.IntegerField('portfolio user', blank=False, default=1)
 
     def __str__(self):
         return self.name

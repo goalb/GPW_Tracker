@@ -1,15 +1,22 @@
 {% extends 'base/main.html' %}
 
 {% block content %}
-    <center>
-    <h1>{{ portfolio }}:</h1>
-    <br>
-        {{ portfolio.name }}
 
+<div class="card">
+  <div class="card-header">
+    Portfolio
+  </div>
+    <div class="card-body">
+    <h5 class="card-title">{{ venue }}</h5>
+    <p class="card-text">
+    	<ul>
 
-
-    </center>
-
+            <li>{{ portfolio.name }}</li>
+            <!-- Todo <li>{{ portfolio.company }}</li> -->
+            <li>Owner: {{ portfolio_owner }}</li>
+	    </ul>
+    </div>
+</div>
 
 {% endblock content %}
 

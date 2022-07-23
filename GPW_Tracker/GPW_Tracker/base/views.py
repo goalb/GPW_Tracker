@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
-from .forms import PortfolioForm
+from .forms import PortfolioForm, PortfolioFormAdmin
 from .models import Portfolio, Company
+from django.contrib.auth.models import User
 import csv
-
+from django.contrib import messages
 from django.core.paginator import Paginator
 
 # from django.contrib.auth import authenticate, login, logout
@@ -45,15 +46,28 @@ def search_company(request):
 def add_portfolio(request):
     submitted = False
     if request.method == "POST":
-        form = PortfolioForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/add_portfolio?submitted=True')
+        if request.user.is_superuser:
+            form = PortfolioFormAdmin(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/add_portfolio?submitted=True')
+        else:
+            form = PortfolioForm(request.POST)
+            if form.is_valid():
+                portfolio = form.save(commit=False)
+                portfolio.user = request.user.id  # tu coś może być
+                portfolio.save()
+                # Going back to the page
+                return HttpResponseRedirect('/add_portfolio?submitted=True')
     else:
-        form = PortfolioForm
+        if request.user.is_superuser:
+            form = PortfolioFormAdmin
+        else:
+            form = PortfolioForm
+
         if 'submitted' in request.GET:
             submitted = True
-
+        # Success message
     return render(request, 'base/add_portfolio.html', {'form': form, 'submitted': submitted})
 
 
@@ -61,7 +75,7 @@ def list_portfolio(request):
     list_portfolio = Portfolio.objects.all().order_by('name')
 
     # Pagination
-    p = Paginator(list_portfolio, 1)
+    p = Paginator(list_portfolio, 3)
     page = request.GET.get('page')
     portfolios = p.get_page(page)
 
@@ -70,7 +84,8 @@ def list_portfolio(request):
 
 def show_portfolio(request, portfolio_id):
     portfolio = Portfolio.objects.get(pk=portfolio_id)
-    return render(request, 'base/show_portfolio.html', {'portfolio': portfolio})
+    portfolio_owner = User.objects.get(pk=portfolio.user)
+    return render(request, 'base/show_portfolio.html', {'portfolio': portfolio, 'portfolio_owner': portfolio_owner})
 
 
 def update_portfolio(request, portfolio_id):
@@ -84,8 +99,13 @@ def update_portfolio(request, portfolio_id):
 
 def delete_portfolio(request, portfolio_id):
     portfolio = Portfolio.objects.get(pk=portfolio_id)
-    portfolio.delete()
-    return redirect('list-portfolio')
+    if request.user == portfolio.user:
+        portfolio.delete()
+        messages.success(request, ("Portfolio deleted"))
+        return redirect('list-portfolio')
+    else:
+        messages.success(request, ("You are not allowed to remoce this portfolio"))
+        return redirect('list-portfolio')
 
 
 def portfolio_text(request):
