@@ -1,6 +1,8 @@
 {% extends 'base/main.html' %}
 
 {% block content %}
+
+{% if user.is_authenticated %}
     <center>
     <h1>Update portfolio:</h1>
     <br>
@@ -15,6 +17,10 @@
 
     </center>
 
+{% else %}
+<h1>You must be log in</h1>
+<a href="{% url 'login' %}">Login here</a>
+{% endif %}
 
 {% endblock content %}
 
