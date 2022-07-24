@@ -20,5 +20,6 @@ urlpatterns = [
     path('update_portfolio/<portfolio_id>', views.update_portfolio, name='update-portfolio'),
     path('delete_portfolio/<portfolio_id>', views.delete_portfolio, name='delete-portfolio'),
     path('portfolio_text', views.portfolio_text, name='portfolio-text'),
-    path('portfolio_download_csv', views.portfolio_download_csv, name='portfolio-download-csv')
+    path('portfolio_download_csv', views.portfolio_download_csv, name='portfolio-download-csv'),
+    path('search_portfolio', views.search_portfolio, name='search-portfolio'),
 ]

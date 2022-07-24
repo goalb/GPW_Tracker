@@ -15,8 +15,8 @@ class PortfolioForm(ModelForm):
         }
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Name'}),
-            'company': forms.SelectMultiple(attrs={'class': 'form-control', 'placeholder':'Company'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}),
+            'company': forms.SelectMultiple(attrs={'class': 'form-control', 'placeholder': 'Company'}),
         }
 
 
@@ -33,6 +33,6 @@ class PortfolioFormAdmin(ModelForm):
         }
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Name'}),
-            'company': forms.SelectMultiple(attrs={'class': 'form-control', 'placeholder':'Company'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}),
+            'company': forms.SelectMultiple(attrs={'class': 'form-control', 'placeholder': 'Company'}),
         }

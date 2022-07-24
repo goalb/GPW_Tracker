@@ -88,6 +88,15 @@ def show_portfolio(request, portfolio_id):
     return render(request, 'base/show_portfolio.html', {'portfolio': portfolio, 'portfolio_owner': portfolio_owner})
 
 
+def search_portfolio(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        portfolios = Portfolio.objects.filter(name__contains=searched)
+        return render(request, 'base/search_portfolio.html', {'searched': searched, 'portfolios': portfolios})
+    else:
+        return render(request, 'base/search_portfolio.html', {})
+
+
 def update_portfolio(request, portfolio_id):
     portfolio = Portfolio.objects.get(pk=portfolio_id)
     form = PortfolioForm(request.POST or None, instance=portfolio)

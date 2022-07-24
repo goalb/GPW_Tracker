@@ -1,0 +1,61 @@
+{% extends 'base/main.html' %}
+
+{% block content %}
+
+<div class="card">
+  <div class="card-header">
+    {% if searched %}
+		You Searched For {{ searched }}
+	{% else %}
+		Search Portfolio...
+	{% endif %}
+  </div>
+  <div class="card-body">
+
+      <!-- Main search function -->
+<form method=POST action="{% url 'search-portfolio' %}">
+        {% csrf_token %}
+
+        <input class="form-control me-2" type="search" placeholder="Search portfolio" aria-label="Search" name="searched">
+        <br/>
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </form>
+</div>
+</div>
+
+<br/>
+
+{% for portfolio in portfolios %}
+
+<div class="card">
+  <div class="card-header">
+      <a href=" {% url 'show-portfolio' portfolio.id %}" >{{ portfolio }}</a>
+  </div>
+<div class="card-body">
+    <h5 class="card-title">Portfolio: {{ portfolio.name }}</h5>
+    <p class="card-text">
+        <ul>
+           <li>Portfolio: {{ portfolio.name }}</li>
+            <li>Companies:<br/>
+                    {% for company in portfolio.company.all %}
+                {{ company }}<br/>
+                    {% endfor %}
+            </li>
+        </ul>
+    </p>
+  </div>
+
+  <!-- Module only for owner of portfolio or superuser -->
+  {% if user.is_authenticated %}
+    {% if user.id == portfolio.user or user.is_superuser %}
+      <div class="card-footer text-muted">
+        <a href="{% url 'update-portfolio' portfolio.id %}" class="btn btn-outline-secondary btn-sm">Update portfolio</a>
+        <a href="{% url 'delete-portfolio' portfolio.id %}" class="btn btn-outline-danger btn-sm">Delete portfolio</a>
+      </div>
+    {% endif %}
+  {% endif %}
+</div>
+	<br/><br/>
+{% endfor %}
+
+{% endblock content %}
